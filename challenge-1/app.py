@@ -128,7 +128,7 @@ class TestSubnetAllocationWithoutWeight(unittest.TestCase):
         self.assertEqual(len(nat_instances[0].subnets), 2)  # NAT 1 should have 2 subnets
         self.assertEqual(len(nat_instances[1].subnets), 1)  # NAT 2 should have 1 subnet
 
-        print("### Test allocating subnets cross AZ ###")
+        print("--- Test allocating subnets cross AZ ---")
         for nat in nat_instances:
             print(nat)
 
