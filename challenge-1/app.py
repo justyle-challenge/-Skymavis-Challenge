@@ -33,6 +33,10 @@ def allocate_subnets_to_nat_instances(subnets, nat_instances):
     for subnet in subnets:
         subnets_by_az[subnet.az].append(subnet)
 
+    # # Allocate subnets to NAT instances in the same AZ with priority (bonus)
+    # for az, az_subnets in subnets_by_az.items():
+    #     az_subnets.sort(key=lambda subnet: subnet.priority, reverse=True) # Sort subnets by priority descending
+    
     # print (f"Group Subnets by AZ:\n", subnets_by_az)
 
     # Unallocated subnets
