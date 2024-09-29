@@ -3,7 +3,7 @@ Compares block numbers between two Ethereum providers (Ankr and Infura)
    - if Ankr blocknumber - Infura blocknumber < 5 => success
    - else => fail
 
-# Run local test 
+# Run local 
 ```shell
 pip install flask requests python-dotenv
 pỵthon app.py

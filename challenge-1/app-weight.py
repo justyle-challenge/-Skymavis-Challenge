@@ -39,10 +39,9 @@ def allocate_subnets_to_nat_instances(subnets, nat_instances):
     for az, az_subnets in subnets_by_az.items():
         az_nats = nat_by_az.get(az, [])
         if az_nats:
-            # Sort by least total weight NAT instance
-            az_nats.sort(key=lambda nat: nat.total_weight)
+            # Allocate the subnet to the NAT instance with the least total weight
+            az_nats.sort(key=lambda nat: nat.total_weight)  # Sort by least total weight NAT instance  
             for subnet in az_subnets:
-                # Allocate the subnet to the NAT instance with the least total weight
                 nat = az_nats[0]
                 nat.subnets.append(subnet)
                 nat.total_weight += subnet.weight
@@ -52,12 +51,12 @@ def allocate_subnets_to_nat_instances(subnets, nat_instances):
             unallocated_subnets.extend(az_subnets)
 
     # Allocate unallocated subnets to NAT instances in other AZs (cross-AZ)
-    all_nats = sorted(nat_instances, key=lambda nat: nat.total_weight)  # Sort by least total weight
+    all_nats = sorted(nat_instances, key=lambda nat: nat.total_weight)
     for subnet in unallocated_subnets:
         nat = all_nats[0]
         nat.subnets.append(subnet)
         nat.total_weight += subnet.weight
-        all_nats.sort(key=lambda nat: nat.total_weight)  # Re-sort after adding the subnet
+        all_nats.sort(key=lambda nat: nat.total_weight)
 
 # Problems
 nat_instances = [
@@ -73,14 +72,17 @@ subnets = [
     Subnet(4, "us-west1-c", weight=4),  # Cross-AZ allocation needed
 ]
 
+print("### Problems ###\n" + "--- NAT Instances ---\n" + "\n".join([f"NAT Instance {nat.id} ({nat.az})" for nat in nat_instances]) +
+      "\n--- Subnets ---\n" + "\n".join([f"Subnet {subnet.id} ({subnet.az})" for subnet in subnets]))
+
 allocate_subnets_to_nat_instances(subnets, nat_instances)
 
-print("### The result ###")
+print("\n### The result ###")
 for nat in nat_instances:
     print(nat)
 
 # Unit test
-print("### The unit test result ###")
+print("\n### The unit test result ###")
 class TestSubnetAllocationWithWeight(unittest.TestCase):
 
     def test_allocate_subnets_same_az(self):
